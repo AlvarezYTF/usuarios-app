@@ -8,17 +8,17 @@ class Database
 
     public function __construct()
     {
-        try {
-            $this->conexion();
-        } catch (PDOException $e) {
-            echo "Conexión no valida porqué: " . $e->getMessage();
-        }
+        $this->conexion();
     }
 
     protected function conexion()
     {
-        $this->conn = new PDO("mysql:host=$this->server", $this->user, $this->pass);
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $this->conn = new PDO("mysql:host=$this->server", $this->user, $this->pass);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new Exception("La conexión falló porque: " . $e->getMessage());
+        }
     }
 
     public function getConexion()
