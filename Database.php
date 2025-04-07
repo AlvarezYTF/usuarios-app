@@ -27,30 +27,31 @@ class Database
     private function crearDb()
     {
         try {
-            $sql = "CREATE DATABASE $this->db";
+            $sql = "CREATE DATABASE IF NOT EXISTS `$this->db`";
             $this->query($sql);
         } catch (PDOException $e) {
-            throw new Exception("No se puede crear la base porqué:" . "\n" . $e->getMessage());
+            throw new Exception("No se puede crear la base porque: " . $e->getMessage());
         }
     }
 
     private function crearTabla()
     {
         try {
-            $db = "USE $this->db";
-            $this->query($db);
-            $sql = "CREATE TABLE usuarios ( 
-            id INT AUTO_INCREMENT PRIMARY KEY, 
-            primer_nombre VARCHAR(50) NOT NULL,
-            segundo_nombre VARCHAR(50) NULL,
-            primer_apellido VARCHAR(50) NOT NULL,
-            segundo_apellido VARCHAR(50) NULL,
-            fecha_nacimiento DATE NOT NULL,
-            telefono VARCHAR(10) NOT NULL
+            // Cambiamos el contexto a la base de datos seleccionada
+            $this->conn->exec("USE `$this->db`");
+
+            $sql = "CREATE TABLE IF NOT EXISTS usuarios ( 
+                id INT AUTO_INCREMENT PRIMARY KEY, 
+                primer_nombre VARCHAR(50) NOT NULL,
+                segundo_nombre VARCHAR(50) NULL,
+                primer_apellido VARCHAR(50) NOT NULL,
+                segundo_apellido VARCHAR(50) NULL,
+                fecha_nacimiento DATE NOT NULL,
+                telefono VARCHAR(10) NOT NULL
             )";
             $this->query($sql);
         } catch (PDOException $e) {
-            throw new Exception("No se puede crear la tabla porqué:" . "\n" . $e->getMessage());
+            throw new Exception("No se puede crear la tabla porque: " . $e->getMessage());
         }
     }
 
@@ -58,4 +59,10 @@ class Database
     {
         $this->conn->exec($sql);
     }
+}
+
+try {
+    $conn = new Database;
+} catch (Exception $e) {
+    echo $e->getMessage();
 }
