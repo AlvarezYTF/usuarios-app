@@ -9,6 +9,7 @@ class Database
     public function __construct()
     {
         $this->conexion();
+        $this->crearDb();
     }
 
     protected function conexion()
@@ -21,8 +22,16 @@ class Database
         }
     }
 
-    public function getConexion()
-    {
-        return $this->conn;
+    private function crearDb() {
+        try {
+            $sql = "CREATE DATABASE usuario";
+            $this->query($sql);
+        } catch (PDOException $e) {
+            throw new Exception("No se puede crear la base porqué:". "\n" . $e->getMessage());
+        }
+    }
+
+    private function query($sql) {
+        $this->conn->exec($sql);
     }
 }
