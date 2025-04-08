@@ -76,7 +76,7 @@ class Usuario extends Database
     {
         $fechaNacimiento = new DateTime($fechaNacimiento);
         $hoy = new DateTime();
-        $edad = $hoy->diff($fechaNacimiento)->y; // Calcula la diferencia en años
+        $edad = $hoy->diff($fechaNacimiento)->y;
         return $edad;
     }
     public function Actualizar($id, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)
@@ -86,7 +86,7 @@ class Usuario extends Database
             return false;
         }
 
-        // Verificar si el usuario existe
+
         try {
             $sqlCheck = "SELECT * FROM usuarios WHERE id = :id";
             $stmtCheck = $this->conn->prepare($sqlCheck);
@@ -103,7 +103,6 @@ class Usuario extends Database
             return false;
         }
 
-        // Actualizar el usuario
         try {
             $sql = "UPDATE usuarios 
                 SET primer_nombre = :primer_nombre, 
@@ -125,6 +124,36 @@ class Usuario extends Database
             return true;
         } catch (PDOException $e) {
             echo "Error al actualizar el usuario: " . $e->getMessage();
+            return false;
+        }
+    }
+    public function Eliminar($id)
+    {
+        if (!$this->conn) {
+            echo "Database connection not established.";
+            return false;
+        }
+
+        try {
+
+            $sqlCheck = "SELECT * FROM usuarios WHERE id = :id";
+            $stmtCheck = $this->conn->prepare($sqlCheck);
+            $stmtCheck->bindParam(':id', $id);
+            $stmtCheck->execute();
+            $usuario = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+            if (!$usuario) {
+                echo "El usuario con ID $id no existe.\n";
+                return false;
+            }
+
+            $sql = "DELETE FROM usuarios WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "Error al eliminar el usuario: " . $e->getMessage();
             return false;
         }
     }
