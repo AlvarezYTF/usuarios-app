@@ -55,14 +55,13 @@ class Database
         }
     }
 
+    public function getConnection()
+    {
+        return $this->conn;
+    }
+
     private function query($sql)
     {
         $this->conn->exec($sql);
     }
-}
-
-try {
-    $conn = new Database;
-} catch (Exception $e) {
-    echo $e->getMessage();
 }
