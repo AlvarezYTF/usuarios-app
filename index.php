@@ -171,7 +171,20 @@ class Interfaz extends Usuario
 
     private function eliminarUsuarioPorID()
     {
-        echo "Función no implementada aún.\n";
+        echo "Ingrese el ID del usuario a eliminar: ";  
+        $id = trim(fgets(STDIN));
+        if (empty($id) || !is_numeric($id)) {
+            echo "ID inválido. Intenta de nuevo.\n";
+            return $this->eliminarUsuarioPorID();
+        }
+
+        // Intentar eliminar el usuario en la base de datos
+        if ($this->usuario->Eliminar($id)) {
+            echo "Usuario eliminado exitosamente.\n";
+        } else {
+            echo "Error al eliminar el usuario o el usuario no existe.\n";
+        }
+
         $this->mostrarMenu();
     }
 }
