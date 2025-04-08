@@ -6,7 +6,8 @@ class Interfaz extends Usuario
 {
     private $usuario;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->usuario = new Usuario();
     }
@@ -51,54 +52,66 @@ class Interfaz extends Usuario
     }
 
     private function crearUsuario()
-{
-    echo "Ingrese el primer nombre: ";
-    $primerNombre = trim(fgets(STDIN));
-    if (empty($primerNombre)) {
-        echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
-        return $this->crearUsuario();
-    }
+    {
+        echo "Ingrese el primer nombre: ";
+        $primerNombre = trim(fgets(STDIN));
+        if (empty($primerNombre)) {
+            echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
+            return $this->crearUsuario();
+        }
 
-    echo "Ingrese el segundo nombre: ";
-    $segundoNombre = trim(fgets(STDIN));
+        echo "Ingrese el segundo nombre: ";
+        $segundoNombre = trim(fgets(STDIN));
 
-    echo "Ingrese el primer apellido: ";
-    $primerApellido = trim(fgets(STDIN));
-    if (empty($primerApellido)) {
-        echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
-        return $this->crearUsuario();
-    }
+        echo "Ingrese el primer apellido: ";
+        $primerApellido = trim(fgets(STDIN));
+        if (empty($primerApellido)) {
+            echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
+            return $this->crearUsuario();
+        }
 
-    echo "Ingrese el segundo apellido: ";
-    $segundoApellido = trim(fgets(STDIN));
+        echo "Ingrese el segundo apellido: ";
+        $segundoApellido = trim(fgets(STDIN));
 
-    echo "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
-    $fecha_nacimiento = trim(fgets(STDIN));
-    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
-        echo "Formato de fecha inválido. Intenta de nuevo.\n";
-        return $this->crearUsuario();
-    }
+        echo "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
+        $fecha_nacimiento = trim(fgets(STDIN));
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
+            echo "Formato de fecha inválido. Intenta de nuevo.\n";
+            return $this->crearUsuario();
+        }
 
-    echo "Ingrese el teléfono: ";
-    $telefono = trim(fgets(STDIN));
-    if (!preg_match('/^\d{10}$/', $telefono)) {
-        echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
-        return $this->crearUsuario();
-    }
+        echo "Ingrese el teléfono: ";
+        $telefono = trim(fgets(STDIN));
+        if (!preg_match('/^\d{10}$/', $telefono)) {
+            echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
+            return $this->crearUsuario();
+        }
 
-    // Intentar crear el usuario en la base de datos
-    if ($this->usuario->Crear($primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
-        echo "Usuario creado exitosamente.\n";
-    } else {
-        echo "Error al crear el usuario.\n";
-    }
+        // Intentar crear el usuario en la base de datos
+        if ($this->usuario->Crear($primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
+            echo "Usuario creado exitosamente.\n";
+        } else {
+            echo "Error al crear el usuario.\n";
+        }
 
-    $this->mostrarMenu();
+        $this->mostrarMenu();
     }
 
     private function listarUsuarios()
     {
-        echo "Función no implementada aún.\n";
+        $usuarios = $this->usuario->Listar();
+        if ($usuarios === false) {
+            echo "Error al obtener la lista de usuarios.\n";
+        } elseif (empty($usuarios)) {
+            echo "No se encontraron usuarios.\n";
+        } else {
+            echo "Lista de usuarios:\n";
+            foreach ($usuarios as $usuario) {
+                echo "Nombre Completo: {$usuario['nombre_completo']}, ";
+                echo "Edad: {$usuario['edad']} años, ";
+                echo "Teléfono: {$usuario['telefono']}\n";
+            }
+        }
         $this->mostrarMenu();
     }
 

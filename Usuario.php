@@ -41,4 +41,42 @@ class Usuario extends Database
             }
         }
     }
+
+    public function Listar()
+    {
+        if (!$this->conn) {
+            echo "Database connection not established.";
+            return false;
+        }
+        try {
+            $sql = "SELECT primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono FROM usuarios";
+            $con = $this->conn->prepare($sql);
+            $con->execute();
+            $usuarios = $con->fetchAll(PDO::FETCH_ASSOC);
+
+            $usuariosConDatos = array_map(function ($usuario) {
+                $usuario['nombre_completo'] = trim("{$usuario['primer_nombre']} {$usuario['segundo_nombre']} {$usuario['primer_apellido']} {$usuario['segundo_apellido']}");
+                $usuario['edad'] = $this->calcularEdad($usuario['fecha_nacimiento']);
+                return [
+                    'nombre_completo' => $usuario['nombre_completo'],
+                    'edad' => $usuario['edad'],
+                    'telefono' => $usuario['telefono']
+                ];
+            }, $usuarios);
+
+            return $usuariosConDatos;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+
+    private function calcularEdad($fechaNacimiento)
+    {
+        $fechaNacimiento = new DateTime($fechaNacimiento);
+        $hoy = new DateTime();
+        $edad = $hoy->diff($fechaNacimiento)->y; // Calcula la diferencia en años
+        return $edad;
+    }
 }
