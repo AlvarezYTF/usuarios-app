@@ -171,7 +171,7 @@ class Interfaz extends Usuario
 
     private function eliminarUsuarioPorID()
     {
-        echo "Ingrese el ID del usuario a eliminar: ";
+        echo "Ingrese el ID del usuario a eliminar: ";  
         $id = trim(fgets(STDIN));
         if (empty($id) || !is_numeric($id)) {
             echo "ID inválido. Intenta de nuevo.\n";
