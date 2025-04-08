@@ -54,8 +54,15 @@ class Database
             throw new Exception("No se puede crear la tabla porque: " . $e->getMessage());
         }
     }
+
     private function query($sql)
     {
         $this->conn->exec($sql);
     }
+}
+
+try {
+    $conn = new Database;
+} catch (Exception $e) {
+    echo $e->getMessage();
 }
