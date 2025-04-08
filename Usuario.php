@@ -8,34 +8,37 @@ class Usuario extends Database
     public $segundoApellido;
     public $fecha_nacimiento;
     public $telefono;
+    public $conn;
 
-    public function __construct($primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)
+    public function __construct()
     {
-
-        $this->primerNombre = $primerNombre;
-        $this->segundoNombre = $segundoNombre;
-        $this->primerApellido = $primerApellido;
-        $this->segundoApellido = $segundoApellido;
-        $this->fecha_nacimiento = $fecha_nacimiento;
-        $this->telefono = $telefono;
+        parent::__construct();
+        $this->conn = $this->getConnection();
     }
 
-    public function Crear()
+
+    public function Crear($primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)
     {
-        try {
-            $sql = "INSERT INTO usuarios (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono)VALUES (primer_nombre, segundo_nombre, primer_apellido,segundo_apellido,fecha_nacimiento, telefono)";
-            $con = $this->conn->prepare($sql);
-            $con->bindParam('primer_nombre', $this->primerNombre);
-            $con->bindParam('segundo_nombre', $this->segundoNombre);
-            $con->bindParam('primer_apellido', $this->primerApellido);
-            $con->bindParam('segundo_apellido', $this->segundoApellido);
-            $con->bindParam('fecha_nacimiento', $this->fecha_nacimiento);
-            $con->bindParam('telefono', $this->telefono);
-            $con->execute();
-            return true;
-        } catch (PDOException $e) {
-            echo "Error:" . $e->getMessage();
+        if (!$this->conn) {
+            echo "Database connection not established.";
             return false;
+        } {
+            try {
+                $sql = "INSERT INTO usuarios (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono)
+                    VALUES (:primer_nombre, :segundo_nombre, :primer_apellido, :segundo_apellido, :fecha_nacimiento, :telefono)";
+                $con = $this->conn->prepare($sql);
+                $con->bindParam(':primer_nombre', $primerNombre);
+                $con->bindParam(':segundo_nombre', $segundoNombre);
+                $con->bindParam(':primer_apellido', $primerApellido);
+                $con->bindParam(':segundo_apellido', $segundoApellido);
+                $con->bindParam(':fecha_nacimiento', $fecha_nacimiento);
+                $con->bindParam(':telefono', $telefono);
+                $con->execute();
+                return true;
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return false;
+            }
         }
     }
 }

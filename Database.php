@@ -55,6 +55,11 @@ class Database
         }
     }
 
+    public function getConnection()
+    {
+        return $this->conn;
+    }
+
     private function query($sql)
     {
         $this->conn->exec($sql);
