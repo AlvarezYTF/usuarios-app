@@ -2,13 +2,18 @@
 
 require_once('Usuario.php');
 
-class Interfaz {
+class Interfaz extends Usuario
+{
     private $usuario;
 
     public function __construct() {
+        parent::__construct();
+        $this->usuario = new Usuario();
     }
 
-    public function menu() {
+    public function menu()
+    {
+
         echo "\nSelecciona una opción:\n";
         echo "1. Crear usuario\n";
         echo "2. Listar usuarios\n";
@@ -40,57 +45,71 @@ class Interfaz {
         }
     }
 
-    private function mostrarMenu() {
+    private function mostrarMenu()
+    {
         $this->menu();
     }
 
-    private function crearUsuario() {
-        echo "Ingrese el primer nombre: ";
-        $primerNombre = (readline("Ingrese el primer nombre: "));
-        if (empty($primerNombre)) {
-            echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
-            return $this->crearUsuario();
-        }
-        $segundoNombre = (readline("Ingrese el segundo nombre: "));
-        $primerApellido = (readline("Ingrese el primer apellido: "));
-        if (empty($primerApellido)) {
-            echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
-            return $this->crearUsuario();
-        }
-        $segundoApellido = (readline("Ingrese el segundo apellido: "));
-        $fecha_nacimiento = (readline("Ingrese la fecha de nacimiento (YYYY-MM-DD): "));
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
-            echo "Formato de fecha inválido. Intenta de nuevo.\n";
-            return $this->crearUsuario();
-        }
-        $telefono = (readline("Ingrese el teléfono: "));
-        if (!preg_match('/^\d{10}$/', $telefono)) {
-            echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
-            return $this->crearUsuario();
-        }
-        
-        $this->usuario = new Usuario(null, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono);
-
-        if ($this->usuario->Crear($this->usuario->id, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
-            echo "Usuario creado exitosamente.\n";
-        } else {
-            echo "Error al crear el usuario.\n";
-        }
-
-        $this->mostrarMenu();
+    private function crearUsuario()
+{
+    echo "Ingrese el primer nombre: ";
+    $primerNombre = trim(fgets(STDIN));
+    if (empty($primerNombre)) {
+        echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
+        return $this->crearUsuario();
     }
 
-    private function listarUsuarios() {
+    echo "Ingrese el segundo nombre: ";
+    $segundoNombre = trim(fgets(STDIN));
+
+    echo "Ingrese el primer apellido: ";
+    $primerApellido = trim(fgets(STDIN));
+    if (empty($primerApellido)) {
+        echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
+        return $this->crearUsuario();
+    }
+
+    echo "Ingrese el segundo apellido: ";
+    $segundoApellido = trim(fgets(STDIN));
+
+    echo "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
+    $fecha_nacimiento = trim(fgets(STDIN));
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
+        echo "Formato de fecha inválido. Intenta de nuevo.\n";
+        return $this->crearUsuario();
+    }
+
+    echo "Ingrese el teléfono: ";
+    $telefono = trim(fgets(STDIN));
+    if (!preg_match('/^\d{10}$/', $telefono)) {
+        echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
+        return $this->crearUsuario();
+    }
+
+    // Intentar crear el usuario en la base de datos
+    if ($this->usuario->Crear($primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
+        echo "Usuario creado exitosamente.\n";
+    } else {
+        echo "Error al crear el usuario.\n";
+    }
+
+    $this->mostrarMenu();
+    }
+
+    private function listarUsuarios()
+    {
         echo "Función no implementada aún.\n";
         $this->mostrarMenu();
     }
 
-    private function buscarUsuarioPorID() {
+    private function buscarUsuarioPorID()
+    {
         echo "Función no implementada aún.\n";
         $this->mostrarMenu();
     }
 
-    private function eliminarUsuarioPorID() {
+    private function eliminarUsuarioPorID()
+    {
         echo "Función no implementada aún.\n";
         $this->mostrarMenu();
     }
