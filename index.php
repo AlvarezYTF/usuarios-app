@@ -117,57 +117,57 @@ class Interfaz extends Usuario
 
 
     private function actualizarUsuario()
-{
-    echo "Ingrese el ID del usuario a actualizar: ";
-    $id = trim(fgets(STDIN));
-    if (empty($id) || !is_numeric($id)) {
-        echo "ID inválido. Intenta de nuevo.\n";
-        return $this->actualizarUsuario();
+    {
+        echo "Ingrese el ID del usuario a actualizar: ";
+        $id = trim(fgets(STDIN));
+        if (empty($id) || !is_numeric($id)) {
+            echo "ID inválido. Intenta de nuevo.\n";
+            return $this->actualizarUsuario();
+        }
+
+        echo "Ingrese el nuevo primer nombre: ";
+        $primerNombre = trim(fgets(STDIN));
+        if (empty($primerNombre)) {
+            echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
+            return $this->actualizarUsuario();
+        }
+
+        echo "Ingrese el nuevo segundo nombre: ";
+        $segundoNombre = trim(fgets(STDIN));
+
+        echo "Ingrese el nuevo primer apellido: ";
+        $primerApellido = trim(fgets(STDIN));
+        if (empty($primerApellido)) {
+            echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
+            return $this->actualizarUsuario();
+        }
+
+        echo "Ingrese el nuevo segundo apellido: ";
+        $segundoApellido = trim(fgets(STDIN));
+
+        echo "Ingrese la nueva fecha de nacimiento (YYYY-MM-DD): ";
+        $fecha_nacimiento = trim(fgets(STDIN));
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
+            echo "Formato de fecha inválido. Intenta de nuevo.\n";
+            return $this->actualizarUsuario();
+        }
+
+        echo "Ingrese el nuevo teléfono: ";
+        $telefono = trim(fgets(STDIN));
+        if (!preg_match('/^\d{10}$/', $telefono)) {
+            echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
+            return $this->actualizarUsuario();
+        }
+
+        // Intentar actualizar el usuario en la base de datos
+        if ($this->usuario->Actualizar($id, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
+            echo "Usuario actualizado exitosamente.\n";
+        } else {
+            echo "Error al actualizar el usuario. Verifica si el ID existe.\n";
+        }
+
+        $this->mostrarMenu();
     }
-
-    echo "Ingrese el nuevo primer nombre: ";
-    $primerNombre = trim(fgets(STDIN));
-    if (empty($primerNombre)) {
-        echo "El primer nombre no puede estar vacío. Intenta de nuevo.\n";
-        return $this->actualizarUsuario();
-    }
-
-    echo "Ingrese el nuevo segundo nombre: ";
-    $segundoNombre = trim(fgets(STDIN));
-
-    echo "Ingrese el nuevo primer apellido: ";
-    $primerApellido = trim(fgets(STDIN));
-    if (empty($primerApellido)) {
-        echo "El primer apellido no puede estar vacío. Intenta de nuevo.\n";
-        return $this->actualizarUsuario();
-    }
-
-    echo "Ingrese el nuevo segundo apellido: ";
-    $segundoApellido = trim(fgets(STDIN));
-
-    echo "Ingrese la nueva fecha de nacimiento (YYYY-MM-DD): ";
-    $fecha_nacimiento = trim(fgets(STDIN));
-    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_nacimiento)) {
-        echo "Formato de fecha inválido. Intenta de nuevo.\n";
-        return $this->actualizarUsuario();
-    }
-
-    echo "Ingrese el nuevo teléfono: ";
-    $telefono = trim(fgets(STDIN));
-    if (!preg_match('/^\d{10}$/', $telefono)) {
-        echo "El teléfono debe tener 10 dígitos. Intenta de nuevo.\n";
-        return $this->actualizarUsuario();
-    }
-
-    // Intentar actualizar el usuario en la base de datos
-    if ($this->usuario->Actualizar($id, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)) {
-        echo "Usuario actualizado exitosamente.\n";
-    } else {
-        echo "Error al actualizar el usuario. Verifica si el ID existe.\n";
-    }
-
-    $this->mostrarMenu();
-}
 
     private function eliminarUsuarioPorID()
     {

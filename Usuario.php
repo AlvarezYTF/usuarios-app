@@ -80,32 +80,32 @@ class Usuario extends Database
         return $edad;
     }
     public function Actualizar($id, $primerNombre, $segundoNombre, $primerApellido, $segundoApellido, $fecha_nacimiento, $telefono)
-{
-    if (!$this->conn) {
-        echo "Database connection not established.";
-        return false;
-    }
-
-    // Verificar si el usuario existe
-    try {
-        $sqlCheck = "SELECT * FROM usuarios WHERE id = :id";
-        $stmtCheck = $this->conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(':id', $id);
-        $stmtCheck->execute();
-        $usuario = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-
-        if (!$usuario) {
-            echo "El usuario con ID $id no existe.\n";
+    {
+        if (!$this->conn) {
+            echo "Database connection not established.";
             return false;
         }
-    } catch (PDOException $e) {
-        echo "Error al verificar el usuario: " . $e->getMessage();
-        return false;
-    }
 
-    // Actualizar el usuario
-    try {
-        $sql = "UPDATE usuarios 
+        // Verificar si el usuario existe
+        try {
+            $sqlCheck = "SELECT * FROM usuarios WHERE id = :id";
+            $stmtCheck = $this->conn->prepare($sqlCheck);
+            $stmtCheck->bindParam(':id', $id);
+            $stmtCheck->execute();
+            $usuario = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+            if (!$usuario) {
+                echo "El usuario con ID $id no existe.\n";
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error al verificar el usuario: " . $e->getMessage();
+            return false;
+        }
+
+        // Actualizar el usuario
+        try {
+            $sql = "UPDATE usuarios 
                 SET primer_nombre = :primer_nombre, 
                     segundo_nombre = :segundo_nombre, 
                     primer_apellido = :primer_apellido, 
@@ -113,20 +113,19 @@ class Usuario extends Database
                     fecha_nacimiento = :fecha_nacimiento, 
                     telefono = :telefono 
                 WHERE id = :id";
-        $con = $this->conn->prepare($sql);
-        $con->bindParam(':id', $id);
-        $con->bindParam(':primer_nombre', $primerNombre);
-        $con->bindParam(':segundo_nombre', $segundoNombre);
-        $con->bindParam(':primer_apellido', $primerApellido);
-        $con->bindParam(':segundo_apellido', $segundoApellido);
-        $con->bindParam(':fecha_nacimiento', $fecha_nacimiento);
-        $con->bindParam(':telefono', $telefono);
-        $con->execute();
-        return true;
-    } catch (PDOException $e) {
-        echo "Error al actualizar el usuario: " . $e->getMessage();
-        return false;
+            $con = $this->conn->prepare($sql);
+            $con->bindParam(':id', $id);
+            $con->bindParam(':primer_nombre', $primerNombre);
+            $con->bindParam(':segundo_nombre', $segundoNombre);
+            $con->bindParam(':primer_apellido', $primerApellido);
+            $con->bindParam(':segundo_apellido', $segundoApellido);
+            $con->bindParam(':fecha_nacimiento', $fecha_nacimiento);
+            $con->bindParam(':telefono', $telefono);
+            $con->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "Error al actualizar el usuario: " . $e->getMessage();
+            return false;
+        }
     }
-}
-
 }
