@@ -60,9 +60,3 @@ class Database
         $this->conn->exec($sql);
     }
 }
-
-try {
-    $conn = new Database;
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
